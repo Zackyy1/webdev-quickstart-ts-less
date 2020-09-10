@@ -1,0 +1,57 @@
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.container .buttons {
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  margin: 0 auto;
+}
+.container .buttons button.start,
+.container .buttons button.step {
+  width: 100px;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  background: none;
+  font-size: 1.2rem;
+}
+.container .maze-container {
+  margin: 300px auto;
+}
+.container .maze-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+}
+.container .maze-container ul li {
+  cursor: pointer;
+  color: black;
+  text-align: center;
+  width: 20px;
+  font-size: 8px;
+  height: 20px;
+  border: 1px solid #ffffff;
+  background-color: #c7c7c7;
+}
+.container .maze-container ul li.current {
+  background-color: #4395d8;
+}
+.container .maze-container ul li.goal {
+  background-color: #b91e52;
+}
+.container .maze-container ul li.goal.current {
+  background-color: #2bb91e;
+}
+.container .maze-container ul li.wall {
+  background-color: #1f1f1f;
+}
