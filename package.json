@@ -1,0 +1,24 @@
+{
+  "name": "webdev-quickstart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zackyy1/webdev-quickstart.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zackyy1/webdev-quickstart/issues"
+  },
+  "homepage": "https://github.com/Zackyy1/webdev-quickstart#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "@types/jquery": "^3.5.1",
+    "jquery": "^3.5.1"
+  }
+}
