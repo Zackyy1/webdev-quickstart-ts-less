@@ -1,10 +1,9 @@
-
-function Init() {
-    console.log('Hello world!')
-}
-
-
+var MyModule;
+(function (MyModule) {
+    MyModule.Init = function () {
+        console.log('Hello world!');
+    };
+})(MyModule || (MyModule = {}));
 $(document).ready(function () {
-    Init();
-
+    MyModule.Init();
 });
