@@ -6,12 +6,21 @@ body {
 .container {
   display: flex;
   flex-direction: column;
+  padding: 5rem;
+}
+.container .row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.container .row .info {
+  min-width: 100px;
 }
 .container .buttons {
   display: flex;
   flex-direction: row;
   width: 300px;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 .container .buttons button.start,
 .container .buttons button.step {
@@ -24,7 +33,7 @@ body {
   font-size: 1.2rem;
 }
 .container .maze-container {
-  margin: 300px auto;
+  width: auto;
 }
 .container .maze-container ul {
   list-style: none;

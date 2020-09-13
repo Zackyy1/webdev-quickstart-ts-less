@@ -7,12 +7,23 @@ body {
 .container {
     display: flex;
     flex-direction: column;
+    padding: 5rem;
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .info {
+            min-width: 100px;
+        }
+    }
 
     .buttons {
         display: flex;
         flex-direction: row;
         width: 300px;
-        margin: 0 auto;
+        margin: 50px auto;
         button.start, button.step {
             width: 100px;
             margin: 0 auto;
@@ -28,7 +39,7 @@ body {
 
     .maze-container {
 
-        margin: 300px auto;
+        width: auto;
 
         ul {
             list-style: none;
@@ -43,7 +54,6 @@ body {
                 width: 20px;
                 font-size: 8px;
                 height: 20px;
-                // padding: 1rem;
                 border: 1px solid rgb(255, 255, 255);
                 background-color: rgb(199, 199, 199);
 

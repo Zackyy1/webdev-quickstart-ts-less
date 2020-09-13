@@ -9,15 +9,19 @@ module Labyrinth {
     const START_BUTTON: string = '[data-js-start]';
     const STEP_BUTTON: string = '[data-js-step]';
 
-    const TEST = true;
+    const MAZE_WIDTH: number = 7;
+    const MAZE_HEIGHT: number = 7;
+
     let correctPath = [];
+    let paths = [];
+
 
     export const Init = (): void => {
         console.log('Init Labyrinth v2')
         let params = {
             startCoordinates: {x: 2, y: 2}
         }
-        let Maze = buildMazeData(12, 17, params);
+        let Maze = buildMazeData(MAZE_WIDTH, MAZE_HEIGHT, params);
         buildMazeIntoHtml(Maze);
         initButtonListeners(Maze);
     }
@@ -48,13 +52,24 @@ module Labyrinth {
                 maze[params.startCoordinates.y][params.startCoordinates.x].data.current = true
             }
         }
+
+        correctPath.push(maze[params.startCoordinates.y][params.startCoordinates.x]);
+        paths.push(maze[params.startCoordinates.y][params.startCoordinates.x]);
         return maze;
 
     }
 
+    const getCurrentCell = (maze) => {
+        let currentX = $(MAZE_CONTAINER).find(MAZE_CELL+'.current').data('x');
+        let currentY = $(MAZE_CONTAINER).find(MAZE_CELL+'.current').data('y');
+        return maze[currentY][currentX]
+    }
+
     const initButtonListeners = (maze) => {
+        const CURRENT_CELL = getCurrentCell(maze);
+
         $(START_BUTTON).on('click', e => {
-            tryPathfind(maze);
+            tryPathfind(maze, CURRENT_CELL.x, CURRENT_CELL.y);
         });
 
         $(MAZE_CONTAINER).find(MAZE_CELL).on('click', e => {
@@ -64,9 +79,7 @@ module Labyrinth {
         })
 
         $(STEP_BUTTON).on('click', e => {
-            let currentX = $(MAZE_CONTAINER).find(MAZE_CELL+'.current').data('x');
-            let currentY = $(MAZE_CONTAINER).find(MAZE_CELL+'.current').data('y');
-            tryPathfind(maze, currentX, currentY);
+            tryPathfind(maze, CURRENT_CELL.x, CURRENT_CELL.y, {step: true});
         })
     }
 
@@ -104,13 +117,14 @@ module Labyrinth {
 
     const checkDirection = (direction, maze, cell) => {
         let nextCell;
+        let toReturn = false;
         switch (direction) {
             case 'right':
                 if (maze[cell.y][cell.x+1]) {
                     nextCell = maze[cell.y][cell.x+1];
                     if (cell.x < maze[0].length-1 && nextCell.data.visited == false && nextCell.data.wall == false) {
                         console.log('can go right')
-                        return true
+                        toReturn = true
                     }
                 }
                 
@@ -120,7 +134,7 @@ module Labyrinth {
                     nextCell = maze[cell.y+1][cell.x];
                     if (cell.y < maze.length-1 && nextCell.data.visited == false && nextCell.data.wall == false) {
                         console.log('can go down')
-                        return true
+                        toReturn = true
                     }
                 }
                 break;
@@ -130,7 +144,7 @@ module Labyrinth {
                     nextCell = maze[cell.y][cell.x-1];
                     if (cell.x > 0 && nextCell.data.visited == false && nextCell.data.wall == false) {
                         console.log('can go left')
-                        return true
+                        toReturn = true
     
                     } 
                 }
@@ -141,19 +155,20 @@ module Labyrinth {
                     nextCell = maze[cell.y-1][cell.x];
                     if (cell.y > 0 && nextCell.data.visited == false && nextCell.data.wall == false) {
                         console.log('can go up')
-                        return true
+                        toReturn = true
     
                     }
-                } else {
-                    console.log('CANT GO UP')
                 }
-               
             break;
         
             default:
                 break;
         }
-        return false
+
+        if (toReturn === true) {
+            paths.push(cell.x, cell.y);
+        }
+        return toReturn
     }
 
 
@@ -161,6 +176,8 @@ module Labyrinth {
         let initX = cell.x;
         let initY = cell.y
         let newPosition = (cell);
+        newPosition.data.visited = true;
+
 
         switch (direction) {
             case 'right':
@@ -183,8 +200,13 @@ module Labyrinth {
         return newPosition
     }
 
+    const updateCurrentCell = (cell) => {
+        $(MAZE_CONTAINER).find(MAZE_CELL).removeClass(CLASS_CURRENT);
+         const CURRENT_CELL_ELEMENT: JQuery<HTMLElement> = $(MAZE_CONTAINER).find(`${MAZE_CELL}[data-cell-coordinates="${cell.x},${cell.y}"]`);
+         CURRENT_CELL_ELEMENT.addClass(CLASS_CURRENT);
+    };
   
-    const tryPathfind = (maze, x?, y?) => {
+    const tryPathfind = (maze, x?, y?, params?) => {
         /**
          * 1) Assign a starting point (x, y)
          * 2) Try moving right or down or left or up
@@ -192,6 +214,8 @@ module Labyrinth {
          * 4) if can't move any further or all positions are visited, come back to last visited position with available moving space
          * 5) if reached the end, you won :)
          */
+
+        //  debugger
 
         console.log('------ new iteration -------\n')
        
@@ -202,66 +226,76 @@ module Labyrinth {
             y = 0;
             maze[y][x].data.visited = true;
             correctPath = [];
-            correctPath.push(maze[y][x])
-
          }
 
          let cell = maze[y][x];
+         console.log('Current cell:', cell);
 
-         console.log('Can go everywhere?', 
-         checkDirection('right', maze, cell),
-         checkDirection('down', maze, cell),
-         checkDirection('left', maze, cell),
-         checkDirection('up', maze, cell)
-         )
-
+         
          if (cell.data.isGoal == true) {
             console.log('Reached the end :)');
            
         } else {
 
+        correctPath.push(cell);
+        console.log(correctPath);
 
-            
+        cell.data.current = false;
+
+        // console.log('Can go everywhere?', 
+        //  'right', checkDirection('right', maze, cell),
+        //  'down', checkDirection('down', maze, cell),
+        //  'left', checkDirection('left', maze, cell),
+        //  'up', checkDirection('up', maze, cell)
+        //  )
+
          // 2.1) Try moving right
          if (checkDirection('right', maze, cell)) {
             cell = go('right', cell)
-            correctPath.push(cell)
 
         } else if (checkDirection('down', maze, cell)) {
             cell = go('down', cell)
-            correctPath.push(cell)
 
         } else if (checkDirection('left', maze, cell)) {
             cell = go('left', cell)
-            correctPath.push(cell)
 
         } else if (checkDirection('up', maze, cell)) {
             cell = go('up', cell)
-            correctPath.push(cell)
 
         } else {
+            // correctPath.pop();
+            cell.data.visited = true;
+            cell.data.current = false;
+
+            // cell = maze[correctPath[correctPath.length-1].y][correctPath[correctPath.length-1].x];
             correctPath.pop();
-            cell = maze[correctPath[correctPath.length-1].y][correctPath[correctPath.length-1].x];
+            cell = correctPath.pop();
+
+            console.log('Now we\'re gonna switch to', maze[correctPath[correctPath.length-1].y][correctPath[correctPath.length-1].x], correctPath[correctPath.length-1].x, correctPath[correctPath.length-1].y)
+
             cell.data.current = true;
             y = cell.y;
             x = cell.x;
-            console.log('Cant move anywhere else :(, going to', correctPath[correctPath.length-1].x, correctPath[correctPath.length-1].y); 
+            console.log('Cant move anywhere else :(, going to', x, y); 
          
         }
-        cell.data.visited = true;
 
-        console.log('correct path:', correctPath)
+        let r = '';
+        correctPath.map(e => {
+            r+=e;
+        })
+        $('[data-js-info]').text(r);
 
+        console.log('paths:', paths)
+        
+        
 
-         // Mark our current location in HTML
-         // Remove current class from ALL list items
-         $(MAZE_CONTAINER).find(MAZE_CELL).removeClass(CLASS_CURRENT);
-         const CURRENT_CELL_ELEMENT: JQuery<HTMLElement> = $(MAZE_CONTAINER).find(`${MAZE_CELL}[data-cell-coordinates="${cell.x},${cell.y}"]`);
-         CURRENT_CELL_ELEMENT.addClass(CLASS_CURRENT);
-    
-         if (!TEST) {
-            setTimeout( () => tryPathfind(maze, cell.x, cell.y), 100);
+        updateCurrentCell(cell);
 
+        // Repeat
+         if ( ( params && params.step === false ) || !params) {
+            // console.log('step', params, params.step)
+            setTimeout( () => tryPathfind(maze, cell.x, cell.y, params), 100);
          }
         }
 
