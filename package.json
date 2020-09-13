@@ -1,24 +1,28 @@
 {
-  "name": "webdev-quickstart",
+  "name": "webdev-quickstart-tc-less",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"tsc src/js/main.ts -w\" \"less-watch-compiler src/css src/css styles.less\""  
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zackyy1/webdev-quickstart.git"
+    "url": "git+https://github.com/Zackyy1/webdev-quickstart-ts-less.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zackyy1/webdev-quickstart/issues"
+    "url": "https://github.com/Zackyy1/webdev-quickstart-ts-less/issues"
   },
-  "homepage": "https://github.com/Zackyy1/webdev-quickstart#readme",
-  "devDependencies": {},
+  "homepage": "https://github.com/Zackyy1/webdev-quickstart-ts-less#readme",
+  "devDependencies": {
+    "tsc-watch": "^4.2.9"
+  },
   "dependencies": {
     "@types/jquery": "^3.5.1",
+    "concurrently": "^5.3.0",    
     "jquery": "^3.5.1"
   }
 }
