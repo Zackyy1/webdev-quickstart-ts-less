@@ -31,5 +31,7 @@ To start developing with TypeScript and Less, run
 Start developing right away! This package contains:
 
 -jQuery
+
 -TypeScript Compiler / watcher (Recompiles on save)
+
 -Less to CSS compiler (On save)
