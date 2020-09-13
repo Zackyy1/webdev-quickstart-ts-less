@@ -7,7 +7,9 @@ This package is used to start working immediately. TypeScript and Less compilabl
 ## How to start
 
 `git clone *placeholder* {your-app-name}`
+
 `cd {your-app-name}`
+
 `npm i`
 
 
