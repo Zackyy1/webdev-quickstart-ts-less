@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"tsc src/js/main.ts -w\" \"less-watch-compiler src/css src/css styles.less\""  
+    "start": "concurrently \"tsc src/js/main.ts -w\" \"less-watch-compiler src/css src/css styles.less\""
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@types/jquery": "^3.5.1",
-    "concurrently": "^5.3.0",    
+    "concurrently": "^5.3.0",
     "jquery": "^3.5.1"
   }
 }
