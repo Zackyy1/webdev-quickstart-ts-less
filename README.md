@@ -1,7 +1,5 @@
 # WebDev Quickstart
 
-## About
-
 This package is used to start working immediately with TypeScript and Less.
 
 ### PLEASE NOTE
